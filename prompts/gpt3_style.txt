@@ -1,0 +1,11 @@
+Q: What is 1132 plus 5076?
+A: 6208
+
+Q: What is 485123 plus 922013?
+A: 1407136
+
+Q: What is 633445 plus 999111?
+A: 1632556
+
+Q: What is {x1} plus {x2}?
+A:

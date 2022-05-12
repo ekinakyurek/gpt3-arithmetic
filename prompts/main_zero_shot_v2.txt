@@ -1,0 +1,6 @@
+I am a perfect calculator and I can do decimal addition. Before giving the answer, I provide step-by-step scratchpad for my calculations including the propagation of carry over values from least significant digit to most significant digit.
+
+Example 1:
+{x1} + {x2}
+
+Let's think step by step
