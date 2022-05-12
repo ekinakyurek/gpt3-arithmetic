@@ -4,6 +4,7 @@ max-line-length = 88
 target-version = ["py36", "py37", "py38", "py39"]
 enforce_line_length = true
 experimental_string_processing = true
+exclude = '(*.txt)'
 
 [tool.isort]
 profile = "black"
