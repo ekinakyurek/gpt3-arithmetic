@@ -67,9 +67,9 @@ def main(_):
             "outputs": outputs,
             "preds": preds,
         }
-        for _ in range(5):
+        for _ in range(2):
             current_inputs = []
-            for i in range(20):
+            for i in range(2):
                 x1 = random_with_n_digits(rng, n)
                 x2 = random_with_n_digits(rng, n)
                 y = x1 + x2
@@ -91,7 +91,7 @@ def main(_):
                     frequency_penalty=0,
                     presence_penalty=0,
                 )
-                time.sleep(60)
+                # time.sleep(60)
 
                 current_outputs = response["choices"]
                 current_outputs = [
@@ -135,6 +135,7 @@ def main(_):
                     pred.replace(" ", "")
                     .replace(FLAGS.output_delim, "")
                     .replace(".", "")
+                    .replace(",", "")
                     .lstrip("0")
                 )
                 preds.append(pred)
