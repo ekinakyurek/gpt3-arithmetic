@@ -126,8 +126,8 @@ def main(_):
                 elif FLAGS.output_form == "plain":
                     assert FLAGS.output_delim == ""
                     pred = re.search(
-                        digit_regex, output.split(" ")[-1]
-                    ).groups()[0]
+                        digit_regex, output
+                    ).groups()[-1]
                 else:
                     raise ValueError("Unknown ordering")
 
