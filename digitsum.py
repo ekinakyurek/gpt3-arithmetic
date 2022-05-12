@@ -23,12 +23,10 @@ flags.DEFINE_string("input_delim", default=",", help="Input digits delimiter")
 
 flags.DEFINE_string("output_delim", default=",", help="Output digits delimiter")
 
-flags.DEFINE_string("ordered",
+flags.DEFINE_string("output_form",
     default="reversed",
     help="Whether to order the digits"
 ) # options=["ordered", "reversed", "plain"]
-
-flags.DEFINE_bool("plain", default=False, help="Baseline prompts involve =")
 
 flags.DEFINE_string(
     "range", default="3,7", help="Range of number of digits to evaluate (min, max)"
@@ -75,7 +73,6 @@ def main(_):
                 x1 = random_with_n_digits(rng, n)
                 x2 = random_with_n_digits(rng, n)
                 y = x1 + x2
-                print(x1, x2, y)
                 y_str = digit_to_str(y, delim=" ")
                 x1_str = digit_to_str(x1, delim=FLAGS.input_delim)
                 x2_str = digit_to_str(x2, delim=FLAGS.input_delim)
@@ -89,7 +86,7 @@ def main(_):
                     engine="text-davinci-002",
                     prompt=current_inputs,
                     temperature=0,
-                    max_tokens=400
+                    max_tokens=400,
                     top_p=1,
                     frequency_penalty=0,
                     presence_penalty=0,
@@ -117,19 +114,19 @@ def main(_):
                 raise ValueError(f"Unknown delimiter: {FLAGS.output_delim}")
 
             try:
-                if FLAGS.ordered == "ordered":
+                if FLAGS.output_form == "ordered":
                     pred = re.search(
                         r"correct order is " + digit_regex, output
                     ).groups()[0]
-                elif FLAGS.ordered == "reversed":
+                elif FLAGS.output_form == "reversed":
                     pred = re.search(
                         r"reverse order is " + digit_regex, output
                     ).groups()[0]
                     pred = pred[::-1]
-                elif FLAGS.ordered == "plain":
+                elif FLAGS.output_form == "plain":
                     assert FLAGS.output_delim == ""
                     pred = re.search(
-                        digit_regex, output
+                        digit_regex, output.split(" ")[-1]
                     ).groups()[0]
                 else:
                     raise ValueError("Unknown ordering")
