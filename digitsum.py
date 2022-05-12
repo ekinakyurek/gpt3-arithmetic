@@ -5,6 +5,7 @@ import time
 import numpy as np
 import openai
 from absl import app, flags, logging
+from requests import options
 
 
 openai.api_key = os.getenv("OPENAI_API_KEY_MIT")
@@ -22,7 +23,12 @@ flags.DEFINE_string("input_delim", default=",", help="Input digits delimiter")
 
 flags.DEFINE_string("output_delim", default=",", help="Output digits delimiter")
 
-flags.DEFINE_bool("ordered", default=False, help="Whether to order the digits")
+flags.DEFINE_string("ordered",
+    default="reversed",
+    help="Whether to order the digits"
+) # options=["ordered", "reversed", "plain"]
+
+flags.DEFINE_bool("plain", default=False, help="Baseline prompts involve =")
 
 flags.DEFINE_string(
     "range", default="3,7", help="Range of number of digits to evaluate (min, max)"
@@ -69,6 +75,7 @@ def main(_):
                 x1 = random_with_n_digits(rng, n)
                 x2 = random_with_n_digits(rng, n)
                 y = x1 + x2
+                print(x1, x2, y)
                 y_str = digit_to_str(y, delim=" ")
                 x1_str = digit_to_str(x1, delim=FLAGS.input_delim)
                 x2_str = digit_to_str(x2, delim=FLAGS.input_delim)
@@ -82,7 +89,7 @@ def main(_):
                     engine="text-davinci-002",
                     prompt=current_inputs,
                     temperature=0,
-                    max_tokens=400,
+                    max_tokens=400
                     top_p=1,
                     frequency_penalty=0,
                     presence_penalty=0,
@@ -102,19 +109,30 @@ def main(_):
         for i, (output, answer) in enumerate(zip(outputs, answers)):
             if FLAGS.output_delim == ",":
                 digit_regex = r"([0-9]+(,[0-9]+)+)"
-            else:
+            elif FLAGS.output_delim == " ":
                 digit_regex = r"([0-9]+(\s[0-9]+)+)"
+            elif FLAGS.output_delim == "":
+                digit_regex = r"([0-9]+)"
+            else:
+                raise ValueError(f"Unknown delimiter: {FLAGS.output_delim}")
 
             try:
-                if FLAGS.ordered:
+                if FLAGS.ordered == "ordered":
                     pred = re.search(
                         r"correct order is " + digit_regex, output
                     ).groups()[0]
-                else:
+                elif FLAGS.ordered == "reversed":
                     pred = re.search(
                         r"reverse order is " + digit_regex, output
                     ).groups()[0]
                     pred = pred[::-1]
+                elif FLAGS.ordered == "plain":
+                    assert FLAGS.output_delim == ""
+                    pred = re.search(
+                        digit_regex, output
+                    ).groups()[0]
+                else:
+                    raise ValueError("Unknown ordering")
 
                 pred = (
                     pred.replace(" ", "")

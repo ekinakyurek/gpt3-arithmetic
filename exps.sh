@@ -19,3 +19,7 @@
 # python digitsum.py --prompt_file=prompts/no_left_to_right.txt --output_file=results/no_left_to_right.json
 # sleep 60
 # python digitsum.py --prompt_file=prompts/no_starting_from_rightmost_column.txt --output_file=results/no_starting_from_rightmost_column.json
+# sleep 60
+python digitsum.py --prompt_file=prompts/plain_zero_shot.txt --output_file=results/plain_zero_shot.json --output_delim='' --input_delim='' --range 3,4 --ordered "plain"
+# sleep 60
+# python digitsum.py --prompt_file=prompts/plain.txt --output_file=results/plain.json --output_delim='' --input_delim='' --range 3,4 --ordered "plain"
