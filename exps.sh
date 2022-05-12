@@ -1,6 +1,6 @@
 # python digitsum.py --prompt_file=prompts/main.txt --output_file=results/main.json
 # sleep 60
-# python digitsum.py --prompt_file=prompts/main_correct_order.txt --output_file=results/main_correct_order.json --ordered
+# python digitsum.py --prompt_file=prompts/main_correct_order.txt --output_file=results/main_correct_order.json --output_form="ordered"
 # sleep 60
 # python digitsum.py --prompt_file=prompts/main_reverse_order.txt --output_file=results/main_reverse_order.json
 # sleep 60
@@ -20,6 +20,10 @@
 # sleep 60
 # python digitsum.py --prompt_file=prompts/no_starting_from_rightmost_column.txt --output_file=results/no_starting_from_rightmost_column.json
 # sleep 60
-python digitsum.py --prompt_file=prompts/plain_zero_shot.txt --output_file=results/plain_zero_shot.json --output_delim='' --input_delim='' --range 3,4 --ordered "plain"
+# python digitsum.py --prompt_file=prompts/plain_zero_shot.txt --output_file=results/plain_zero_shot.json --output_delim='' --input_delim='' --output_form "plain"
 # sleep 60
-# python digitsum.py --prompt_file=prompts/plain.txt --output_file=results/plain.json --output_delim='' --input_delim='' --range 3,4 --ordered "plain"
+# python digitsum.py --prompt_file=prompts/plain.txt --output_file=results/plain.json --output_delim='' --input_delim='' --output_form "plain"
+# sleep 60
+# python digitsum.py --prompt_file=prompts/gpt3_style.txt --output_file=results/gpt3_style.json --output_delim='' --input_delim='' --output_form "plain"
+# sleep 60
+python digitsum.py --prompt_file=prompts/gpt3_style_zero_shot.txt --output_file=results/gpt3_style_zero_shot.json --output_delim='' --input_delim='' --output_form "plain"
