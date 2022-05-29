@@ -1,6 +1,6 @@
 # Notes on Teaching GPT-3 Adding Numbers
 
-Let's start by acknowledging how we can *communicate* with large language models (LLMs) that were simply neural nets trained to predict the next thing given the previous text. This interaction is pretty simple: you just provide the model the instructions in human languages, such as "Translate the following sentence to English: <sentence>," and achieve unprecedented zero-shot ability in machine translation.  Perhaps because of the simplicity, many startups strive to find a software-as-a-service product powered by such single models alone. However, these models can fall short in *novel* tasks with such simple instruction prompting (i.e., zero-shot prompting) &ndash; somewhat, the instructions that we provide are not enough to put the model into the right mind for a particular task or instructions are degenerate to specify the task in mind. 
+Let's start by acknowledging how we can *communicate* with large language models (LLMs) that were simply neural nets trained to predict the next thing given the previous text. This interaction is pretty simple: you just provide the model the instructions in human languages, such as "Translate the following sentence to English: <sentence>," and achieve unprecedented zero-shot ability in machine translation.  Perhaps because of the simplicity, many startups strive to find a software-as-a-service product powered by such single models alone. However, these models can fall short in *novel* tasks with such simple instruction prompting (i.e., zero-shot prompting) &ndash; somewhat, the instructions that we provide are not enough to put the model into the right mind for a particular task or instructions are degenerate to specify the task in mind.
 
 Therefore, even better approach is prompting the model a few example input-output pairs along with instructions, "Translate the following sentences to English: 1) <sentence1>: <translation1>, 2) <sentence2>: <translation2>, 3) <sentence3>:". So, we can hope to specify the target task better with these example input-output pairs. Recent papers show in various NLP tasks that few-shot prompting is superior to zero-shot prompting and try to understand this phenomenon in detail. People often refer to this instantaneous learning ability as in-context learning, meaning that the model can learn from input examples; however, our experiments in this post suggest that few-shot prompting fails in fairly novel/unknown tasks.
 
@@ -25,7 +25,7 @@ Now the model fails to learn this equivalent arithmetic task with a delimiter!
 
 <img src="figures/results_codex/different_fewshot_prompts_plot.jpeg" alt="drawing" height=400/>
 
-So, it can't learn this task in-context with few-shot prompting when a *slight* variation is introduced. Maybe in this "novel" arithmetic task, our scratchpad will be helpful? I will continue with the comma-delimited version of the task as I found it better than the space version with this particular scratchpad. 
+So, it can't learn this task in-context with few-shot prompting when a *slight* variation is introduced. Maybe in this "novel" arithmetic task, our scratchpad will be helpful? I will continue with the comma-delimited version of the task as I found it better than the space version with this particular scratchpad.
 
 <img src="figures/prompts/coma_scratchpad_fewshot.png" alt="drawing" height=400/>
 
@@ -51,7 +51,7 @@ It was very effective in getting the model to achieve the task.
 
 
 
-Another intermediate value in the original trackpad was the reverse of the output number. We tried two different scratchpads without the intermediate reverse number. 
+Another intermediate value in the original trackpad was the reverse of the output number. We tried two different scratchpads without the intermediate reverse number.
 
 <img src="figures/prompts/no_reverse.pg" alt="drawing"/> [TODO: put the prompts]
 
@@ -81,7 +81,7 @@ People found that starting the prompt with "I am smart .." increases the accurac
 
 <img src="figures/prompts/no_perfect_calculator.png" alt="drawing" height=200/>
 
-<img src="figures/results_codex/no_perfect_calculator.jpeg" alt="drawing" heigh="400"/>
+<img src="figures/results_codex/no_perfect_calculator.jpeg" alt="drawing" height="400"/>
 
 
 
@@ -97,7 +97,7 @@ Some suggest that you can trigger this kind of reasoning in a zero-shot manner b
 
 I tried a couple of prompts and none of them worked [TODO continue]
 
- 
+
 
 [TODO add references]
 
