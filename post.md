@@ -8,26 +8,35 @@ The shortcomings of few-shot prompting did not stop the enthusiasts of large lan
 
 To investigate this phenomenon systematically, I took an exploration on tackling teaching GPT-3 by adding two numbers, something simple that we know the algorithm for it, with the aid of scratchpads. Before I get your hopes high, you shouldn't take this as the most systematic approach to understanding this phenomenon but rather a quest for understanding where and why they can be helpful or not.
 
-Without a further due, let's start prompting GPT-3 (codex-GPT-3 `code_davinci_002`[^1]) for the simple integer addition problem.  I follow the template provided in the original GPT-3 paper for zero-shot and few-shot prompts in Figure 1. I used three examples with the same summands in few-shot and scratchpad prompts. I tested the model with 100 number pairs for each digit and will use the same numbers in all of the experiments in this post.
+Without a further due, let's start prompting GPT-3 (codex-GPT-3 `code_davinci_002`[^1]) for the simple integer addition problem.  I follow the template provided in the original GPT-3 paper for zero-shot and few-shot prompts in Figure 1. I used three examples with the same summands in few-shot and scratchpad prompts. I tested the model with 100 number pairs for each digit and will use the same numbers in all of the experiments in this post. Here is our scratchpad prompt:
 
 <img src="figures/prompts/fewshot_zeroshot_scratchpad.png" alt="drawing"/>
+
+<figcaption align = "center">Figure 1: Zero-shot vs Few-shot vs Scratchpad prompts</figcaption>
 
 We will look at the details of the scratchpad prompt later in the blog, but let's first analyze the top-level results presented below.
 
 <img src="figures/results_codex/fewshot_zeroshot_scratchpad_plot.jpeg" alt="drawing" height="400"/>
 
+<figcaption align = "center">Plot 1: Top level results in the arithmetic task</figcaption>
 
 The first impression is that GPT-3 can't benefit from the reasoning steps we provided in the scratchpad (3, 5, 6, and 7 digit results). Possible reasons for this: (1) the format in zero- and few-shot of GPT-3-style is familiar, and the scratchpad that we provide is not, (2) this scratchpad is not optimized enough, or (3) maybe GPT-3 memorized this format (Q: _ A: _ no delimiter between digits, etc.) and overfits to the format? The answer is related to the tokenizer of GPT-3, which doesn't split numbers by each digit; you can see this on the playground of the API by typing a number and hitting the generate button: on the bottom-right, it displays the number of tokens. So, if there is, the algorithm that GPT-3 learned for addition probably is not digit-by-digit, yet we gave it a digit-by-digit algorithm.  Let's try to consolidate this conjecture a bit more using delimiters between numbers in the original few-shot prompt:
 
 <img src="figures/prompts/different_fewshot_prompts.png" alt="drawing"/>
 
+<figcaption align = "center">Figure 2: Few-shot prompts with different delimiters</figcaption>
+
 Now the model fails to learn this equivalent arithmetic task with a delimiter!
 
 <img src="figures/results_codex/different_fewshot_prompts_plot.jpeg" alt="drawing" height=400/>
 
+<figcaption align = "center">Plot 2: Few-shot results with different delimited numbers </figcaption>
+
 So, it can't learn this task in-context with few-shot prompting when a *slight* variation is introduced. Maybe in this "novel" arithmetic task, our scratchpad will be helpful? I will continue with the comma-delimited version of the task as I found it better than the space version with this particular scratchpad.
 
 <img src="figures/prompts/coma_scratchpad_fewshot.png" alt="drawing" height=400/>
+
+<figcaption align = "center">Figure 3: Scratchpad and few-shot (comma) prompt side-by-side </figcaption>
 
 Similarly, the format is a bit different in the scratchpad (for example + vs plus), but my qualitative finding is that it does make the few-shot one worse.
 
@@ -35,31 +44,37 @@ Can scratchpads now teach the model the comma-arithmetic task?
 
 <img src="figures/results_codex/comma_scratchpad_fewshot_plot.jpeg" alt="drawing" height=400/>
 
+<figcaption align = "center">Plot 3: Scratchpad vs Fewshot results with comma delimited numbers </figcaption>
+
 It seems like yes, with the caveat that it is lower than the original few-shot non-delimited arithmetic prompting. But we can still analyze the effects of different parts of the scratchpad.
 
 ## Scratchpad Content
 
 ### Intermediate Values
 
-The most crucial thing scratchpad provides is intermediate value storage. For example, in Figure X, we note write/carry values in each step. Given these intermediate values, the computation that the model needs to do becomes an effortless task, e.g., gathering write values to the current position, so overall computation. We experiment by removing to note write/carry values and removing the reverse ordering.
+The most crucial thing scratchpad provides is intermediate value storage. For example, in Figure X, we note write/carry values in each step. Given these intermediate values, the computation that the model needs to do becomes an effortless task, e.g., gathering write values to the current position, so overall problem. We experiment by removing to note write/carry values and removing the reverse ordering.
 
 <img src="figures/prompts/no_write_carry.png" alt="drawing" height=400/>
+
+<figcaption align = "center">Figure 4: Ablation of scratchpad by removing write/carry values </figcaption>
 
 It was very effective in getting the model to achieve the task.
 
 <img src="figures/results_codex/no_write_carry_plot.jpeg" alt="drawing" height=400/>
 
-
+<figcaption align = "center">Plot 4: Scratchpad results with/without write/carry values </figcaption>
 
 Another intermediate value in the original trackpad was the reverse of the output number. We tried two different scratchpads without the intermediate reverse number.
 
 <img src="figures/prompts/no_reverse.pg" alt="drawing"/> [TODO: put the prompts]
 
+<figcaption align = "center">Figure 5: Scratchpad with/without the reverse output </figcaption>
+
 [TODO explain]
 
 <img src="figures/results_codex/no_reverse.jpeg" alt="drawing" height="400"/>
 
-
+<figcaption align = "center">Plot 5: Effect of removing reserse ordered intermediate output </figcaption>
 
 In conclusion, scratchpads divide a problem into relatively easy subproblems. After saving the results of each subproblem in the output, achieving the final goal becomes very trivial.
 
@@ -71,9 +86,13 @@ As mentioned [here](https://twitter.com/npew/status/1525900849888866307), explic
 
 <img src="figures/prompts/no_carrover_indicator.png" alt="drawing" height=400/>
 
+<figcaption align = "center">Figure 6: Scratchpad with/without the carry-over indicator </figcaption>
+
 Now, we test the effect of these carry-over markings.
 
 <img src="figures/results_codex/no_carry_indicator.jpeg" alt="drawing" height=400/>
+
+<figcaption align = "center">Plot 6: Effect of carry=over indicator</figcaption>
 
 ### Magic Incarnations
 
@@ -81,27 +100,39 @@ People found that starting the prompt with "I am smart .." increases the accurac
 
 <img src="figures/prompts/no_perfect_calculator.png" alt="drawing" height=200/>
 
+<figcaption align = "center">Figure 7: Scratchpad with/without "perfect calculator" </figcaption>
+
 <img src="figures/results_codex/no_perfect_calculator.jpeg" alt="drawing" height="400"/>
 
+<figcaption align = "center">Plot 7: Effect of magical incarnation</figcaption>
 
-
-### Explicit Instructions
+### Explicit Instructions for Step-by-Step Reasoning
 
 <img src="figures/prompts/no_rightmost.png" alt="drawing" height=300/>
 
+<figcaption align = "center">Figure 8: Ablation of scratchpad without saying  "Starting from rightmost column:"</figcaption>
+
 <img src="figures/results_codex/no_starting_from_rightmost_column.jpeg" alt="drawing" height=400/>
 
-## Can we do zero-shot?
+<figcaption align = "center">Plot 8: Effect of explicit instructions</figcaption>
+
+#### Can we do this zero-shot?
 
 Some suggest that you can trigger this kind of reasoning in a zero-shot manner by just appending "Let's think step-by-step" as in [here.](https://twitter.com/arankomatsuzaki/status/1529278580189908993?s=20&t=RP83oaSRS8VDTeV0j69j-w)
 
-I tried a couple of prompts and none of them worked [TODO continue]
+I tried two such zero-shot prompts, and none worked for the arithmetic task.
+
+<img src="figures/prompts/zeroshot_prompts.png" alt="drawing" height=300/>
+
+<figcaption align = "center">Figure 9: Zero-shot prompts to trigger step-by-step reasoning </figcaption>
+
+<img src="figures/results_codex/zeroshot_prompts.jpeg" alt="drawing" height=400/>
+
+<figcaption align = "center">Plot 9: Effect of triggering step-by-step reasoning</figcaption>
 
 
 
-[TODO add references]
+[^1]: We had started with `text-davinci-002` and spent some money, but then I realized codex is free and all of the relative ordering of the success of different prompts stayed the same. In addition, the codex is overall better than the text-based model.
 
-[^1]: We had started with text-davinci-002 and spent some money, but then I realized codex is both free, and all of the relative ordering of prompts stayed the same. Plus, the codex is overall better than the text-based model..
-
-
+## References
 
