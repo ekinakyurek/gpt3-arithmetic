@@ -1,5 +1,11 @@
 # Notes on Teaching GPT-3 Adding Numbers
 
+## Motivation
+
+Human-like abilities of large language models (LLMs), e.g., understanding jokes, excite most researchers, if not all. These simple and previously-not-much-interesting models can execute many complicated tasks with the same parameters such as translation, Q&A, story generation, etc. One thing that has been historically challenging was **reasoning** (concretely multi-step reasoning), but many recent papers show that you can improve LM’s abilities on reasoning-focused tasks by giving them scratchpads, analogous to pen & paper for humans. In some problems, e.g., grade-school math problems, the scratchpad techniques can improve drastically compared to standard prompting, but designing these scratchpads feels more like art (or even magic) than science, meaning that we have some individual examples but no systematic understanding of what is essential and what is not. In this blog post, I take a simple task (integer addition) and try to really understand what is needed (and what is unnecessary) to get LLMs to do it.
+
+## Background
+
 Let's start by acknowledging how we can *communicate* with large language models (LLMs) that were simply neural nets trained to predict the next thing given the previous text. This interaction is pretty simple: you just provide the model the instructions in human languages, such as "Translate the following sentence to English: <sentence>," and achieve unprecedented zero-shot ability in machine translation.  Perhaps because of the simplicity, many startups strive to find a software-as-a-service product powered by such single models alone. However, these models can fall short in *novel* tasks with such simple instruction prompting (i.e., zero-shot prompting) &ndash; somewhat, the instructions that we provide are not enough to put the model into the right mind for a particular task or instructions are degenerate to specify the task in mind.
 
 Therefore, even better approach is prompting the model a few example input-output pairs along with instructions, "Translate the following sentences to English: 1) <sentence1>: <translation1>, 2) <sentence2>: <translation2>, 3) <sentence3>:". So, we can hope to specify the target task better with these example input-output pairs. Recent papers show in various NLP tasks that few-shot prompting is superior to zero-shot prompting and try to understand this phenomenon in detail. People often refer to this instantaneous learning ability as in-context learning, meaning that the model can learn from input examples; however, our experiments in this post suggest that few-shot prompting fails in fairly novel/unknown tasks.
@@ -7,6 +13,10 @@ Therefore, even better approach is prompting the model a few example input-outpu
 The shortcomings of few-shot prompting did not stop the enthusiasts of large language models. A critical step towards bootstrapping the in-context learning ability of LLMs proposed was adding a detailed chain of thoughts or a scratchpad to the few-shot examples given to the model. In Figure 1, we present an example of a scratchpad that contains step-by-step explanations leading to the solution. Chain-of-thought prompting encourages the model to divide problems into intermediate steps that hopefully make the final answer easy to find.
 
 To investigate this phenomenon systematically, I took an exploration on tackling teaching GPT-3 by adding two numbers, something simple that we know the algorithm for it, with the aid of scratchpads. Before I get your hopes high, you shouldn't take this as the most systematic approach to understanding this phenomenon but rather a quest for understanding where and why they can be helpful or not.
+
+## Analysis
+
+### Scratchpads vs Standard Prompting
 
 Without a further due, let's start prompting GPT-3 (codex-GPT-3 `code_davinci_002`[^1]) for the simple integer addition problem.  I follow the template provided in the original GPT-3 paper for zero-shot and few-shot prompts in Figure 1. I used three examples with the same summands in few-shot and scratchpad prompts. I tested the model with 100 number pairs for each digit and will use the same numbers in all of the experiments in this post. Here is our scratchpad prompt:
 
@@ -48,9 +58,9 @@ Can scratchpads now teach the model the comma-arithmetic task?
 
 It seems like yes, with the caveat that it is lower than the original few-shot non-delimited arithmetic prompting. But we can still analyze the effects of different parts of the scratchpad.
 
-## Scratchpad Content
+### Scratchpad Content
 
-### Intermediate Values
+#### Intermediate Values
 
 The most crucial thing scratchpad provides is intermediate value storage. For example, in Figure X, we note write/carry values in each step. Given these intermediate values, the computation that the model needs to do becomes an effortless task, e.g., gathering write values to the current position, so overall problem. We experiment by removing to note write/carry values and removing the reverse ordering.
 
@@ -78,9 +88,9 @@ Another intermediate value in the original trackpad was the reverse of the outpu
 
 In conclusion, scratchpads divide a problem into relatively easy subproblems. After saving the results of each subproblem in the output, achieving the final goal becomes very trivial.
 
-## Scratchpad Style
+### Scratchpad Style
 
-### Breadcrumbs
+#### Breadcrumbs
 
 As mentioned [here](https://twitter.com/npew/status/1525900849888866307), explicitly writing the intermediate values' position or type information helps the model align the values. In the below Figure, we have marked the carry-over values in tri-way sums, as you can see in the below Figure as (c=value) marks.
 
@@ -94,7 +104,7 @@ Now, we test the effect of these carry-over markings.
 
 <figcaption align = "center">Plot 6: Effect of carry=over indicator</figcaption>
 
-### Magic Incarnations
+#### Magic Incarnations
 
 People found that starting the prompt with "I am smart .." increases the accuracy of zero-shot prompting, so we have a similar thing in our main prompt, "I am a perfect calculator." We looked at its effect of it.
 
@@ -106,7 +116,7 @@ People found that starting the prompt with "I am smart .." increases the accurac
 
 <figcaption align = "center">Plot 7: Effect of magical incarnation</figcaption>
 
-### Explicit Instructions for Step-by-Step Reasoning
+#### Explicit Instructions for Step-by-Step Reasoning
 
 <img src="figures/prompts/no_rightmost.png" alt="drawing" height=300/>
 
@@ -116,7 +126,9 @@ People found that starting the prompt with "I am smart .." increases the accurac
 
 <figcaption align = "center">Plot 8: Effect of explicit instructions</figcaption>
 
-#### Can we do this zero-shot?
+
+
+##### Can we do this zero-shot?
 
 Some suggest that you can trigger this kind of reasoning in a zero-shot manner by just appending "Let's think step-by-step" as in [here.](https://twitter.com/arankomatsuzaki/status/1529278580189908993?s=20&t=RP83oaSRS8VDTeV0j69j-w)
 
