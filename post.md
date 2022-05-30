@@ -161,7 +161,7 @@ I tried two such zero-shot prompts, and none worked for the arithmetic task.
 **Citing this blog post**
 
 ```
-@misc{liang2022community-norms,
+@misc{akyurek2022gpt3addition,
     author = {Akyurek, Ekin and Akyurek, Afra Feyza and Andreas, Jacob},
     title  = {Notes on Teaching GPT-3 Adding Numbers},
     url    = {},
