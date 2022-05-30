@@ -14,7 +14,9 @@ Let's start by acknowledging how we can *communicate* with LLMs, e.g., GPT-3 ([B
 
 Therefore, even better approach is prompting the model a few example input-output pairs along with instructions, "Translate the following sentences to English: 1) <sentence1>: <translation1>, 2) <sentence2>: <translation2>, 3) <sentence3>:". So, we can hope to specify the target task better with these example input-output pairs. Recent papers  ([Brown et al., 2020](https://arxiv.org/abs/2005.14165);) show in various NLP tasks that few-shot prompting is superior to zero-shot prompting and try to understand this phenomenon in detail. People often refer to this instantaneous learning ability as in-context learning, meaning that the model can learn from input examples; however, our experiments in this post suggest that few-shot prompting fails in fairly novel/unknown tasks.
 
-The shortcomings of few-shot prompting did not stop the enthusiasts of large language models. A critical step towards bootstrapping the in-context learning ability of LLMs proposed was adding a detailed chain of thoughts or a scratchpad to the few-shot examples given to the model ([Wei et al., 2022](https://arxiv.org/abs/2201.11903);  [Nye et al., 2021](https://arxiv.org/abs/2112.00114)). In Figure 1, we present an example of a scratchpad that contains step-by-step explanations leading to the solution. Chain-of-thought prompting encourages the model to divide problems into intermediate steps that hopefully make the final answer easy to find.
+(See [Xie et al., 2022](https://arxiv.org/pdf/2111.02080.pdf) and [Chan et al., 2022](https://arxiv.org/abs/2205.05055)  for why and when in-context learning might work)
+
+The shortcomings of few-shot prompting did not stop the enthusiasts of large language models. A critical step toward bootstrapping the in-context learning ability of LLMs proposed was adding a detailed chain of thoughts or a scratchpad to the few-shot examples given to the model ([Wei et al., 2022](https://arxiv.org/abs/2201.11903) and  [Nye et al., 2021](https://arxiv.org/abs/2112.00114)). In Figure 1, we present an example of a scratchpad that contains step-by-step explanations leading to the solution. Chain-of-thought prompting encourages the model to divide problems into intermediate steps that hopefully make the final answer easy to find.
 
 To investigate this phenomenon systematically, we took an exploration on tackling teaching GPT-3 by adding two numbers because it is something simple that we know the algorithm for it. Before we get your hopes high, you shouldn't take this as the most systematic approach to understanding this phenomenon but rather a quest for understanding where and why they can be helpful or not.
 
@@ -28,13 +30,13 @@ Without a further due, let's start prompting GPT-3 (codex-GPT-3 `code_davinci_00
 
 <figcaption align = "center">Figure 1: Zero-shot vs Few-shot vs Scratchpad prompts</figcaption>
 
-We will look at the details of the scratchpad prompt later in the blog, but let's first analyze the top-level results presented below.
+We will look at the details of the scratchpad prompt later in this post, but let's first analyze the top-level results presented below.
 
 <img src="figures/results_codex/fewshot_zeroshot_scratchpad_plot.jpeg" alt="drawing" height="400"/>
 
 <figcaption align = "center">Plot 1: Top level results in the arithmetic task</figcaption>
 
-The first impression is that GPT-3 can not benefit from the reasoning steps we provided in the scratchpad (3, 5, 6, and 7 digit results). Possible reasons for this: (1) the format in zero- and few-shot of GPT-3-style is familiar, and the scratchpad that we provide is not, (2) this scratchpad is not optimized enough, or (3) maybe GPT-3 memorized this format (Q: _ A: _ no delimiter between digits, etc.) and overfits to the format? The answer is related to the tokenizer of GPT-3, which doesn't split numbers by each digit; you can see this on the playground of the API by typing a number and hitting the generate button: on the bottom-right, it displays the number of tokens. So, if there is, the algorithm that GPT-3 learned for addition probably is not digit-by-digit, yet we gave it a digit-by-digit algorithm.  Let's try to consolidate this conjecture a bit more using delimiters between numbers in the original few-shot prompt:
+The first impression is that GPT-3 can not benefit from the reasoning steps we provided in the scratchpad (3, 5, 6, and 7[^2] digit results). Possible reasons for this: (1) the format in zero- and few-shot of GPT-3-style is familiar, and the scratchpad that we provide is not, (2) this scratchpad is not optimized enough, or (3) maybe GPT-3 memorized this format (Q: _ A: _ no delimiter between digits, etc.) and overfits to the format? The answer is related to the tokenizer of GPT-3, which doesn't split numbers by each digit; you can see this on the playground of the API by typing a number and hitting the generate button: on the bottom-right, it displays the number of tokens. So, if there is, the algorithm that GPT-3 learned for addition probably is not digit-by-digit, yet we gave it a digit-by-digit algorithm.  Let's try to consolidate this conjecture a bit more using delimiters between numbers in the original few-shot prompt:
 
 <img src="figures/prompts/different_fewshot_prompts.png" alt="drawing"/>
 
@@ -134,7 +136,7 @@ People found that starting the prompt with "I am smart .." increases the accurac
 
 ##### Can we do this zero-shot?
 
-Some suggest that you can trigger this kind of reasoning in a zero-shot manner by just appending "Let's think step-by-step" as in [here.](https://twitter.com/arankomatsuzaki/status/1529278580189908993?s=20&t=RP83oaSRS8VDTeV0j69j-w)
+Some suggest that you can trigger this kind of reasoning in a zero-shot manner by just appending "Let's think step-by-step" as in [here](https://twitter.com/arankomatsuzaki/status/1529278580189908993?s=20&t=RP83oaSRS8VDTeV0j69j-w)
 
 I tried two such zero-shot prompts, and none worked for the arithmetic task.
 
@@ -146,7 +148,24 @@ I tried two such zero-shot prompts, and none worked for the arithmetic task.
 
 <figcaption align = "center">Plot 9: Effect of triggering step-by-step reasoning</figcaption>
 
+## Conclusion
 
+
+
+## Footnotes and Citation
 
 [^1]: We had started with `text-davinci-002` and spent some money, but then I realized codex is free and all of the relative ordering of the success of different prompts stayed the same. In addition, the codex is overall better than the text-based model.
+
+[^2]: Our prompts include up to 6 digits, so 7 digit experiments can be considered an out-of-distribution challenge
+
+**Citing this blog post**
+
+```
+@misc{liang2022community-norms,
+    author = {Akyurek, Ekin and Akyurek, Afra Feyza and Andreas, Jacob},
+    title  = {Notes on Teaching GPT-3 Adding Numbers},
+    url    = {},
+    year   = {2022}
+}
+```
 
