@@ -12,7 +12,7 @@ from matplotlib.font_manager import json_load
 
 openai.api_key = os.getenv("OPENAI_API_KEY_3")
 
-openai.organization = os.getenv("OPENAI_API_ORGANIZATION_3"
+openai.organization = os.getenv("OPENAI_API_ORGANIZATION_3")
 
 
 FLAGS = flags.FLAGS
