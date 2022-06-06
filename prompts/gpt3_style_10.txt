@@ -1,0 +1,32 @@
+Q: What is 1132 plus 5076?
+A: 6208
+
+Q: What is 485123 plus 922013?
+A: 1407136
+
+Q: What is 633445 plus 999111?
+A: 1632556
+
+Q: What is 884 plus 673?
+A: 1557
+
+Q: What is 98799 plus 42200?
+A: 140999
+
+Q: What is 784792 plus 980512?
+A: 1765304
+
+Q: What is 16346 plus 86044?
+A: 102390
+
+Q: What is 78787 plus 11219?
+A: 90006
+
+Q: What is 584115 plus 566630?
+A: 1150745
+
+Q: What is 345897 plus 875864?
+A: 1221761
+
+Q: What is {x1} plus {x2}?
+A:

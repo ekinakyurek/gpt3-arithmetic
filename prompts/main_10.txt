@@ -1,0 +1,128 @@
+I am a perfect calculator and I can do decimal addition. Before giving the answer, I provide step-by-step scratchpad for my calculations including the propagation of carry over values from least significant digit to most significant digit.
+
+Example 1:
+1,1,3,2 + 5,0,7,6
+
+Starting from rightmost column:
+2+6=8, write 8 and carry 0
+3+7+(c=0)=10, write 0 and carry 1
+0+1+(c=1)=2, write 2 and carry 0
+1+5+(c=0)=6, write 6 and carry 0.
+
+The write values are [8,0,2,6] and the last carry is 0, so the number in reverse order is 8,0,2,6,0; in correct order 0,6,2,0,8
+
+Example 2:
+4,8,5,1,2,3 + 9,2,2,0,1,3
+
+Starting from rightmost column:
+3+3=6, write 6 and carry 0
+2+1+(c=0)=3, write 3 and carry 0
+1+0+(c=0)=1, write 1 and carry 0
+5+2+(c=0)=7, write 7 and carry 0
+8+2+(c=0)=10, write 0 and carry 1
+4+9+(c=1)=14, write 4 and carry 1.
+
+The write values are [6,3,1,7,0,4] and the last carry is 1, so the number in reverse order is 6,3,1,7,0,4,1; in correct order 1,4,0,7,1,3,6
+
+Example 3:
+6,3,3,4,4,5 + 9,9,9,1,1,1
+
+Starting from rightmost column:
+5+1=6, write 6 and carry 0
+4+1+(c=0)=5, write 5 and carry 0
+4+1+(c=0)=5, write 5 and carry 0
+3+9+(c=0)=12, write 2 and carry 1
+3+9+(c=1)=13, write 3 and carry 1
+6+9+(c=1)=16, write 6 and carry 1.
+
+The write values are [6,5,5,2,3,6] and the last carry is 1, so the number in reverse order is 6,5,5,2,3,6,1; in correct order 1,6,3,2,5,5,6
+
+Example 4:
+8,8,4 + 6,7,3
+
+Starting from rightmost column:
+4+3=7, write 7 and carry 0
+8+7+(c=0)=15, write 5 and carry 1
+8+6+(c=1)=15, write 5 and carry 1.
+
+The write values are [7,5,5] and the last carry is 1, so the number in reverse order is 7,5,5,1; in correct order 1,5,5,7
+
+Example 5:
+9,8,7,9,9 + 4,2,2,0,0
+
+Starting from rightmost column:
+9+0=9, write 9 and carry 0
+9+0+(c=0)=9, write 9 and carry 0
+7+2+(c=0)=9, write 9 and carry 0
+8+2+(c=0)=10, write 0 and carry 1
+9+4+(c=1)=14, write 4 and carry 1.
+
+The write values are [9,9,9,0,4] and the last carry is 1, so the number in reverse order is 9,9,9,0,4,1; in correct order 1,4,0,9,9,9
+
+Example 6:
+7,8,4,7,9,2 + 9,8,0,5,1,2
+
+Starting from rightmost column:
+2+2=4, write 4 and carry 0
+9+1+(c=0)=10, write 0 and carry 1
+7+5+(c=1)=13, write 3 and carry 1
+4+0+(c=1)=5, write 5 and carry 0
+8+8+(c=0)=16, write 6 and carry 1
+7+9+(c=1)=17, write 7 and carry 1.
+
+The write values are [4,0,3,5,6,7] and the last carry is 1, so the number in reverse order is 4,0,3,5,6,7,1; in correct order 1,7,6,5,3,0,4
+
+Example 7:
+1,6,3,4,6 + 8,6,0,4,4
+
+Starting from rightmost column:
+6+4=10, write 0 and carry 1
+4+4+(c=1)=9, write 9 and carry 0
+3+0+(c=0)=3, write 3 and carry 0
+6+6+(c=0)=12, write 2 and carry 1
+1+8+(c=1)=10, write 0 and carry 1.
+
+The write values are [0,9,3,2,0] and the last carry is 1, so the number in reverse order is 0,9,3,2,0,1; in correct order 1,0,2,3,9,0
+
+Example 8:
+7,8,7,8,7 + 1,1,2,1,9
+
+Starting from rightmost column:
+7+9=16, write 6 and carry 1
+8+1+(c=1)=10, write 0 and carry 1
+7+2+(c=1)=10, write 0 and carry 1
+8+1+(c=1)=10, write 0 and carry 1
+7+1+(c=1)=9, write 9 and carry 0.
+
+The write values are [6,0,0,0,9] and the last carry is 0, so the number in reverse order is 6,0,0,0,9,0; in correct order 0,9,0,0,0,6
+
+Example 9:
+5,8,4,1,1,5 + 5,6,6,6,3,0
+
+Starting from rightmost column:
+5+0=5, write 5 and carry 0
+1+3+(c=0)=4, write 4 and carry 0
+1+6+(c=0)=7, write 7 and carry 0
+4+6+(c=0)=10, write 0 and carry 1
+8+6+(c=1)=15, write 5 and carry 1
+5+5+(c=1)=11, write 1 and carry 1.
+
+The write values are [5,4,7,0,5,1] and the last carry is 1, so the number in reverse order is 5,4,7,0,5,1,1; in correct order 1,1,5,0,7,4,5
+
+Example 10:
+3,4,5,8,9,7 + 8,7,5,8,6,4
+
+Starting from rightmost column:
+7+4=11, write 1 and carry 1
+9+6+(c=1)=16, write 6 and carry 1
+8+8+(c=1)=17, write 7 and carry 1
+5+5+(c=1)=11, write 1 and carry 1
+4+7+(c=1)=12, write 2 and carry 1
+3+8+(c=1)=12, write 2 and carry 1.
+
+The write values are [1,6,7,1,2,2] and the last carry is 1, so the number in reverse order is 1,6,7,1,2,2,1; in correct order 1,2,2,1,7,6,1
+
+Example 11:
+{x1} + {x2}
+
+Starting from rightmost column:

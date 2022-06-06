@@ -34,7 +34,7 @@ flags.DEFINE_string(
 )  # options=["ordered", "reversed", "plain"]
 
 flags.DEFINE_string(
-    "range", default="7,8", help="Range of number of digits to evaluate (min, max)"
+    "range", default="3,8", help="Range of number of digits to evaluate (min, max)"
 )
 
 flags.DEFINE_integer("seed", default=0, help="random seed")
@@ -188,17 +188,17 @@ def main(_):
             )
 
     output_file = os.path.join(FLAGS.exp_folder, FLAGS.output_file)
-    if os.path.exists(output_file):
-        with open(output_file) as handle:
-            exp_data_file = json.load(handle)
-            exp_data_file["7"] = exp_data.get(7, None) or exp_data["7"]
+    # if os.path.exists(output_file):
+    #     with open(output_file) as handle:
+    #         exp_data_file = json.load(handle)
+    #         exp_data_file["7"] = exp_data.get(7, None) or exp_data["7"]
 
-        with open(output_file, "w") as handle:
-            json.dump(exp_data_file, handle)
+    #     with open(output_file, "w") as handle:
+    #         json.dump(exp_data_file, handle)
 
-    # else:
-    #     with open(os.path.join(FLAGS.exp_folder, FLAGS.output_file), "w") as handle:
-    #         json.dump(exp_data, handle)
+    # # else:
+    with open(output_file, "w") as handle:
+        json.dump(exp_data, handle)
 
 
 if __name__ == "__main__":

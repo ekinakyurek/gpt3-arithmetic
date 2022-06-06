@@ -2,7 +2,7 @@
 # python digitsum.py --prompt_file=prompts/main_no_delim.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_no_delim.json
 # python digitsum.py --prompt_file=prompts/main_v2.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_v2.json --input_delim=' ' --output_delim=' ' --output_form="ordered_v2"
 # python digitsum.py --prompt_file=prompts/main_no_delim_all_v2.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_no_delim_all_v2.json --input_delim='' --output_delim='' --output_form="ordered_v2"
-python digitsum.py --prompt_file=prompts/main.txt --exp_folder results_codex --engine code-davinci-002 --exp_file=main.json --output_file=main_eval_in_correct_order.json --output_form="ordered"
+# python digitsum.py --prompt_file=prompts/main.txt --exp_folder results_codex --engine code-davinci-002 --exp_file=main.json --output_file=main_eval_in_correct_order.json --output_form="ordered"
 # python digitsum.py --prompt_file=prompts/main_correct_order.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_correct_order.json --output_form="ordered"
 # python digitsum.py --prompt_file=prompts/main_reverse_order.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_reverse_order.json
 # python digitsum.py --prompt_file=prompts/no_perfect_calculator.txt --exp_folder results_codex --engine code-davinci-002 --output_file=no_perfect_calculator.json
@@ -27,3 +27,9 @@ python digitsum.py --prompt_file=prompts/main.txt --exp_folder results_codex --e
 # python digitsum.py --prompt_file=prompts/main_no_delim_all_v5.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_no_delim_all_v5.json --input_delim='' --output_delim=',' --output_form="ordered_v2"
 # python digitsum.py --prompt_file=prompts/main_zero_shot_v2.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_zero_shot_v2.json  --input_delim=',' --output_delim=',' --output_form "zeroshot_v2"
 # python digitsum.py --prompt_file=prompts/main_correct_order_v2.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_correct_order_v2.json --output_form="ordered"
+# python digitsum.py --prompt_file=prompts/main_10.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_10.json
+# python digitsum.py --prompt_file=prompts/gpt3_style_10.txt --exp_folder results_codex --engine code-davinci-002 --output_file=gpt3_style_10.json --output_delim='' --input_delim='' --output_form "plain" --max_tokens 32
+# python digitsum.py --prompt_file=prompts/main_15.txt --exp_folder results_codex --engine code-davinci-002 --output_file=main_15.json
+python digitsum.py --prompt_file=prompts/gpt3_style_15.txt --exp_folder results_codex --engine code-davinci-002 --output_file=gpt3_style_15.json --output_delim='' --input_delim='' --output_form "plain" --max_tokens 32
+# python digitsum.py --prompt_file=prompts/main_10.txt --exp_folder results_codex --engine code-davinci-002 --exp_file=main_10.json --output_file=main_10_ordered.json  --output_form="ordered"
+# python digitsum.py --prompt_file=prompts/main_15.txt --exp_folder results_codex --engine code-davinci-002 --exp_file=main_15.json --output_file=main_15_ordered.json  --output_form="ordered"
